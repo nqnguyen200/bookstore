@@ -2,6 +2,7 @@ package com.epam.genai.bookstore.service;
 
 import com.epam.genai.bookstore.dto.ChatCompletionRequest;
 import com.epam.genai.bookstore.dto.ChatCompletionResult;
+import com.epam.genai.bookstore.exception.OpenAiError;
 import org.springframework.http.HttpHeaders;
 import org.springframework.http.MediaType;
 import org.springframework.stereotype.Service;
@@ -36,7 +37,7 @@ public class OpenAiService {
                 .body(Mono.just(request), ChatCompletionRequest.class)
                 .retrieve()
                 .bodyToMono(ChatCompletionResult.class)
-                .doOnError(e -> e.printStackTrace())
+                .doOnError(e -> new OpenAiError(e.getMessage()))
                 .block(DEFAULT_TIMEOUT);
     }
 }
